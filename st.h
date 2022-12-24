@@ -83,6 +83,7 @@ void draw(void);
 
 void kscrolldown(const Arg *);
 void kscrollup(const Arg *);
+void externalpipe(const Arg *);
 void printscreen(const Arg *);
 void printsel(const Arg *);
 void sendbreak(const Arg *);
@@ -92,6 +93,8 @@ int tattrset(int);
 void tnew(int, int);
 void tresize(int, int);
 void tsetdirtattr(int);
+void tupdatebgcolor(int, int);
+void tupdatefgcolor(int, int);
 void ttyhangup(void);
 int ttynew(const char *, char *, const char *, char **);
 size_t ttyread(void);
@@ -112,6 +115,7 @@ size_t utf8encode(Rune, char *);
 void *xmalloc(size_t);
 void *xrealloc(void *, size_t);
 char *xstrdup(const char *);
+int  trt_kbdselect(KeySym, char *, int);
 
 /* config.h globals */
 extern char *utmp;
