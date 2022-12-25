@@ -164,7 +164,7 @@ static const ColorScheme schemes[] = {
 };
 
 static const char * const * colorname;
-int colorscheme = 5;
+int colorscheme = 4;
  
 /*
  * Default colors (colorname index)
@@ -224,6 +224,9 @@ static MouseShortcut mshortcuts[] = {
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
 
+static char *openurlcmd[] = { "/bin/sh", "-c", "linkgrabber", "externalpipe", NULL };
+static char *screencmd[] = { "/bin/sh", "-c", "editscreen", "externalpipe", NULL };
+
 /* Internal keyboard shortcuts. */
 #define MODKEY Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
@@ -256,7 +259,8 @@ static Shortcut shortcuts[] = {
 	{ MODKEY,               XK_9,           selectscheme,   {.i =  8} },
 	{ MODKEY,               XK_0,           nextscheme,     {.i = +1} },
 	{ MODKEY|ControlMask,   XK_0,           nextscheme,     {.i = -1} },
-
+	{ MODKEY,               XK_u,           externalpipe,   { .v = openurlcmd } },
+	{ MODKEY,               XK_o,           externalpipe,   { .v = screencmd } },
 };
 
 /*
