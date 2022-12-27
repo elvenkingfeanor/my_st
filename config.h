@@ -129,7 +129,7 @@ static const ColorScheme schemes[] = {
 
 	// One Half light
 	{{"#fafafa", "#e45649", "#50a14f", "#c18401",
-      "#0184bc", "#a626a4", "#0997b3", "#383a42",
+          "#0184bc", "#a626a4", "#0997b3", "#383a42",
 	  "#fafafa", "#e45649", "#50a14f", "#c18401",
 	  "#0184bc", "#a626a4", "#0997b3", "#383a42",
 	  [256]="#cccccc", "#555555"}, 7, 0, 256, 257},
@@ -161,10 +161,18 @@ static const ColorScheme schemes[] = {
 	  "#928374", "#9d0006", "#79740e", "#b57614",
 	  "#076678", "#8f3f71", "#427b58", "#3c3836",
 	  [256]="#3c3836", "#555555"}, 15, 0, 256, 257},
+
+	// Dracula
+	{{"#000000", "#ff5555", "#50fa7b", "#f1fa8c",
+	  "#bd93f9", "#ff79c6", "#8be9fd", "#bbbbbb",
+	  "#44475a", "#ff5555", "#50fa7b", "#f1fa8c",
+	  "#bd93f9", "#ff79c6", "#8be9fd", "#ffffff",
+	  [256]="#282a36", "#f8f8f2"}, 15, 0, 256, 257},
+
 };
 
 static const char * const * colorname;
-int colorscheme = 4;
+int colorscheme = 5;
  
 /*
  * Default colors (colorname index)
