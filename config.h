@@ -5,8 +5,17 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "JetBrainsMono:pixelsize=15:antialias=true:autohint=true";
-static int borderpx = 1;
+/* static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true"; */
+static char *font = "JetBrainsMono Nerd Font:style=Regular:pixelsize=20:antialias=true:autohint=true"; 
+
+/* Spare fonts */
+static char *font2[] = {
+/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
+/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
+	"NotoColorEmoji:style=Regular:pixelsize=22:antialias=true:autohint=true"
+};
+
+static int borderpx = 2;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -53,7 +62,7 @@ int allowwindowops = 0;
  * near minlatency, but it waits longer for slow updates to avoid partial draw.
  * low minlatency will tear/flicker more, as it can "detect" idle too early.
  */
-static double minlatency = 8;
+static double minlatency = 2;
 static double maxlatency = 33;
 
 /*
@@ -129,7 +138,7 @@ static const ColorScheme schemes[] = {
 
 	// One Half light
 	{{"#fafafa", "#e45649", "#50a14f", "#c18401",
-          "#0184bc", "#a626a4", "#0997b3", "#383a42",
+      "#0184bc", "#a626a4", "#0997b3", "#383a42",
 	  "#fafafa", "#e45649", "#50a14f", "#c18401",
 	  "#0184bc", "#a626a4", "#0997b3", "#383a42",
 	  [256]="#cccccc", "#555555"}, 7, 0, 256, 257},
@@ -161,19 +170,11 @@ static const ColorScheme schemes[] = {
 	  "#928374", "#9d0006", "#79740e", "#b57614",
 	  "#076678", "#8f3f71", "#427b58", "#3c3836",
 	  [256]="#3c3836", "#555555"}, 15, 0, 256, 257},
-
-	// Dracula
-	{{"#000000", "#ff5555", "#50fa7b", "#f1fa8c",
-	  "#bd93f9", "#ff79c6", "#8be9fd", "#bbbbbb",
-	  "#44475a", "#ff5555", "#50fa7b", "#f1fa8c",
-	  "#bd93f9", "#ff79c6", "#8be9fd", "#ffffff",
-	  [256]="#282a36", "#f8f8f2"}, 15, 0, 256, 257},
-
 };
 
 static const char * const * colorname;
-int colorscheme = 7;
- 
+int colorscheme = 6;
+
 /*
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
@@ -182,7 +183,7 @@ unsigned int defaultfg;
 unsigned int defaultbg;
 unsigned int defaultcs;
 static unsigned int defaultrcs;
- 
+
 /*
  * Default shape of cursor
  * 2: Block ("█")
@@ -225,6 +226,8 @@ static uint forcemousemod = ShiftMask;
  */
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
+	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
+	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
@@ -237,7 +240,7 @@ static char *screencmd[] = { "/bin/sh", "-c", "editscreen", "externalpipe", NULL
 
 /* Internal keyboard shortcuts. */
 #define MODKEY Mod1Mask
-#define TERMMOD (ControlMask|ShiftMask)
+#define TERMMOD (Mod1Mask|ShiftMask)
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
@@ -245,17 +248,16 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ ControlMask,          XK_equal,       zoom,           {.f = +1} },
-	{ ControlMask,          XK_minus,       zoom,           {.f = -1} },
-	{ ControlMask,          XK_0,        	zoomreset,      {.f =  0} },
-	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
-	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
+	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
+	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
+	{ ControlMask|ShiftMask,XK_C,           clipcopy,       {.i =  0} },
+	{ ControlMask|ShiftMask,XK_V,           clippaste,      {.i =  0} },
+	{ ControlMask|ShiftMask,XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
-	{ TERMMOD,              XK_Escape,      keyboard_select,{.i =  0} },
-	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ TERMMOD,              XK_O,           externalpipe,   {.v =  (const char*[]){ "openurlcmd", NULL } } },
+	{ TERMMOD,              XK_U,           externalpipe,   {.v =  (const char*[]){ "screencmd", NULL } } },
 	{ MODKEY,               XK_1,           selectscheme,   {.i =  0} },
 	{ MODKEY,               XK_2,           selectscheme,   {.i =  1} },
 	{ MODKEY,               XK_3,           selectscheme,   {.i =  2} },
@@ -266,9 +268,10 @@ static Shortcut shortcuts[] = {
 	{ MODKEY,               XK_8,           selectscheme,   {.i =  7} },
 	{ MODKEY,               XK_9,           selectscheme,   {.i =  8} },
 	{ MODKEY,               XK_0,           nextscheme,     {.i = +1} },
-	{ MODKEY|ControlMask,   XK_0,           nextscheme,     {.i = -1} },
-	{ MODKEY,               XK_u,           externalpipe,   { .v = openurlcmd } },
-	{ MODKEY,               XK_o,           externalpipe,   { .v = screencmd } },
+	{ MODKEY,               XK_0,           nextscheme,     {.i = -1} },
+	{ TERMMOD,              XK_Escape,      keyboard_select,{.i =  0} },
+	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
+	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
 };
 
 /*
